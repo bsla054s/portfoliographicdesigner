@@ -39,7 +39,7 @@ export default function Contact() {
           animate={isInView ? { opacity: 1, scale: 1 } : {}}
           transition={{ duration: 0.8 }}
         >
-          <h2 className="text-6xl md:text-7xl font-bold text-gray-900 mb-6">
+          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6">
             {portfolioData.contact.heading}
           </h2>
 

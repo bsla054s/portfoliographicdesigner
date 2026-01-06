@@ -2,6 +2,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { MessageCircle, ArrowDown } from 'lucide-react';
 import { portfolioData } from '../data';
 import { useRef } from 'react';
+import { useParallax } from '../hooks/useParallax';
 
 export default function Hero() {
   const ref = useRef<HTMLDivElement>(null);
@@ -14,22 +15,37 @@ export default function Hero() {
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
   const scale = useTransform(scrollYProgress, [0, 1], [1, 0.8]);
 
+  // Mouse/touch/gyroscope parallax for decorative elements
+  const parallaxBg = useParallax({ intensity: 0.3, maxMovement: 8 });
+  const parallaxSvg = useParallax({ intensity: 0.8, maxMovement: 15 });
+  const parallaxShape1 = useParallax({ intensity: 1.2, maxMovement: 20 });
+  const parallaxShape2 = useParallax({ intensity: 1.5, maxMovement: 25 });
+
   const handleWhatsApp = () => {
     window.open(`https://wa.me/${portfolioData.hero.whatsappNumber}`, '_blank');
   };
 
   return (
     <div ref={ref} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white">
+      {/* Background blur circles with parallax */}
       <motion.div
-        style={{ y, opacity: 0.3 }}
+        style={{ 
+          y, 
+          opacity: 0.3,
+          transform: `translate3d(${parallaxBg.x}px, ${parallaxBg.y}px, 0)`,
+        }}
         className="absolute inset-0 pointer-events-none"
       >
         <div className="absolute top-20 left-10 w-96 h-96 bg-gray-100 rounded-full blur-3xl" />
         <div className="absolute bottom-20 right-10 w-96 h-96 bg-gray-100 rounded-full blur-3xl" />
       </motion.div>
 
+      {/* SVG grid with parallax */}
       <motion.div
-        style={{ y: useTransform(scrollYProgress, [0, 1], ['0%', '20%']) }}
+        style={{ 
+          y: useTransform(scrollYProgress, [0, 1], ['0%', '20%']),
+          transform: `translate3d(${parallaxSvg.x}px, ${parallaxSvg.y}px, 0)`,
+        }}
         className="absolute inset-0 pointer-events-none"
       >
         <svg className="absolute top-1/4 right-1/4 w-32 h-32 text-gray-200" viewBox="0 0 100 100" fill="none">
@@ -39,6 +55,7 @@ export default function Hero() {
         </svg>
       </motion.div>
 
+      {/* Main content */}
       <motion.div
         style={{ scale, opacity }}
         className="relative z-10 max-w-5xl mx-auto px-6 text-center pb-32"
@@ -48,13 +65,13 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <h1 className="text-6xl md:text-8xl font-bold text-gray-900 mb-6 tracking-tight">
+          <h1 className="text-5xl sm:text-6xl md:text-8xl font-bold text-gray-900 mb-6 tracking-tight">
             Hi, I'm {portfolioData.hero.name}
           </h1>
-          <p className="text-2xl md:text-3xl text-gray-900 mb-3 font-light">
+          <p className="text-xl sm:text-2xl md:text-3xl text-gray-900 mb-3 font-light">
             {portfolioData.hero.headline}
           </p>
-          <p className="text-lg text-gray-600 mb-12">
+          <p className="text-base sm:text-lg text-gray-600 mb-12">
             {portfolioData.hero.location}
           </p>
         </motion.div>
@@ -80,6 +97,7 @@ export default function Hero() {
         </motion.div>
       </motion.div>
 
+      {/* Scroll indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -94,12 +112,19 @@ export default function Hero() {
         </motion.div>
       </motion.div>
 
+      {/* Decorative shapes with parallax */}
       <motion.div
-        style={{ y: useTransform(scrollYProgress, [0, 1], ['0%', '80%']) }}
+        style={{ 
+          y: useTransform(scrollYProgress, [0, 1], ['0%', '80%']),
+          transform: `translate3d(${parallaxShape1.x}px, ${parallaxShape1.y}px, 0)`,
+        }}
         className="absolute bottom-20 left-20 w-8 h-8 border-2 border-gray-300 rotate-45"
       />
       <motion.div
-        style={{ y: useTransform(scrollYProgress, [0, 1], ['0%', '90%']) }}
+        style={{ 
+          y: useTransform(scrollYProgress, [0, 1], ['0%', '90%']),
+          transform: `translate3d(${parallaxShape2.x}px, ${parallaxShape2.y}px, 0)`,
+        }}
         className="absolute top-40 right-32 w-4 h-4 bg-gray-300 rounded-full"
       />
     </div>
