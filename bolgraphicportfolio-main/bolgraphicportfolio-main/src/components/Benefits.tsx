@@ -33,7 +33,7 @@ export default function Benefits() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
           {portfolioData.benefits.map((benefit, index) => {
             const Icon = iconMap[benefit.icon];
             return (
@@ -56,11 +56,11 @@ export default function Benefits() {
                   <Icon className="text-white" size={32} />
                 </motion.div>
 
-                <h3 className="text-xl font-bold text-gray-900 mb-3">
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3">
                   {benefit.title}
                 </h3>
 
-                <p className="text-gray-600">
+                <p className="text-sm sm:text-base text-gray-600">
                   {benefit.description}
                 </p>
               </motion.div>

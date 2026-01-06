@@ -27,13 +27,13 @@ export default function About() {
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-900 mb-6">
               About Me
             </h2>
-            <p className="text-xl text-gray-600 leading-relaxed mb-8">
+            <p className="text-lg sm:text-xl text-gray-600 leading-relaxed mb-8">
               {portfolioData.about.description}
             </p>
-            <p className="text-lg text-gray-500 leading-relaxed">
+            <p className="text-base sm:text-lg text-gray-500 leading-relaxed">
               Every project is an opportunity to create something meaningful and lasting.
               I believe great design is invisible — it just works.
             </p>
@@ -45,7 +45,7 @@ export default function About() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="relative"
           >
-            <div className="grid grid-cols-3 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
               {portfolioData.about.stats.map((stat, index) => (
                 <motion.div
                   key={index}
@@ -57,12 +57,12 @@ export default function About() {
                     rotate: 2,
                     transition: { duration: 0.2 }
                   }}
-                  className="bg-gray-900 text-white rounded-2xl p-6 text-center hover:shadow-2xl transition-shadow"
+                  className="bg-gray-900 text-white rounded-2xl p-4 sm:p-6 text-center hover:shadow-2xl transition-shadow"
                 >
-                  <div className="text-4xl font-bold mb-2">
+                  <div className="text-3xl sm:text-4xl font-bold mb-2">
                     {stat.value}
                   </div>
-                  <div className="text-sm opacity-80">
+                  <div className="text-xs sm:text-sm opacity-80">
                     {stat.label}
                   </div>
                 </motion.div>

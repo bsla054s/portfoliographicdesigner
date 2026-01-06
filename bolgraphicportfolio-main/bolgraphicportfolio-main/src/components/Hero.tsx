@@ -67,13 +67,13 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <h1 className="text-6xl md:text-8xl font-bold text-gray-900 mb-6 tracking-tight">
+          <h1 className="text-5xl sm:text-6xl md:text-8xl font-bold text-gray-900 mb-6 tracking-tight">
             Hi, I'm {portfolioData.hero.name}
           </h1>
-          <p className="text-2xl md:text-3xl text-gray-900 mb-3 font-light">
+          <p className="text-xl sm:text-2xl md:text-3xl text-gray-900 mb-3 font-light">
             {portfolioData.hero.headline}
           </p>
-          <p className="text-lg text-gray-600 mb-12">
+          <p className="text-base sm:text-lg text-gray-600 mb-12">
             {portfolioData.hero.location}
           </p>
         </motion.div>
