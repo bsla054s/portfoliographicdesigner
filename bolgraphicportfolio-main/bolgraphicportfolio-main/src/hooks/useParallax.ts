@@ -14,6 +14,11 @@ interface ParallaxValues {
   y: number;
 }
 
+// Type for DeviceOrientationEvent with requestPermission method
+interface DeviceOrientationEventiOS extends DeviceOrientationEvent {
+  requestPermission?: () => Promise<'granted' | 'denied'>;
+}
+
 /**
  * Custom hook for mouse, touch, and gyroscope-based parallax effects.
  * 
@@ -40,15 +45,12 @@ export function useParallax(options: ParallaxOptions = {}) {
     deadZone = 5,
   } = options;
 
-  // Auto-detect device type and set appropriate maxMovement
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-  const finalMaxMovement = maxMovement || (isMobile ? 12 : 18);
-
   // Store current parallax values in refs to avoid re-renders
   const targetRef = useRef<ParallaxValues>({ x: 0, y: 0 });
   const currentRef = useRef<ParallaxValues>({ x: 0, y: 0 });
   const animationFrameRef = useRef<number>();
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
+  const isMobileRef = useRef(false); // Use ref to track mobile state
 
   // State for parallax values (only updated when needed)
   const [parallaxValues, setParallaxValues] = useState<ParallaxValues>({ x: 0, y: 0 });
@@ -62,6 +64,15 @@ export function useParallax(options: ParallaxOptions = {}) {
     if (prefersReducedMotion) {
       return;
     }
+
+    // Update mobile detection inside effect
+    const updateMobileState = () => {
+      isMobileRef.current = window.innerWidth < 768;
+    };
+    updateMobileState();
+
+    // Auto-detect device type and set appropriate maxMovement
+    const finalMaxMovement = maxMovement || (isMobileRef.current ? 12 : 18);
 
     // Smooth animation loop using requestAnimationFrame
     const animate = () => {
@@ -147,7 +158,7 @@ export function useParallax(options: ParallaxOptions = {}) {
 
     // Handle device orientation (gyroscope) - fallback for mobile
     const handleDeviceOrientation = (e: DeviceOrientationEvent) => {
-      if (!enableGyroscope || !isMobile) return;
+      if (!enableGyroscope || !isMobileRef.current) return;
 
       // beta: front-to-back tilt (-180 to 180)
       // gamma: left-to-right tilt (-90 to 90)
@@ -164,8 +175,15 @@ export function useParallax(options: ParallaxOptions = {}) {
       targetRef.current.y = normalizedY * finalMaxMovement * intensity * 0.5;
     };
 
+    // Handle window resize to update mobile state
+    const handleResize = () => {
+      updateMobileState();
+    };
+
     // Add event listeners
-    if (!isMobile) {
+    window.addEventListener('resize', handleResize, { passive: true });
+
+    if (!isMobileRef.current) {
       // Desktop: mouse tracking
       window.addEventListener('mousemove', handleMouseMove, { passive: true });
     } else if (enableTouch) {
@@ -176,11 +194,13 @@ export function useParallax(options: ParallaxOptions = {}) {
     }
 
     // Gyroscope support (with permission for iOS 13+)
-    if (enableGyroscope && isMobile) {
+    if (enableGyroscope && isMobileRef.current) {
+      const DeviceOrientationEventTyped = DeviceOrientationEvent as unknown as DeviceOrientationEventiOS;
+      
       // Check if DeviceOrientationEvent requires permission (iOS 13+)
       if (
         typeof DeviceOrientationEvent !== 'undefined' &&
-        typeof (DeviceOrientationEvent as any).requestPermission === 'function'
+        typeof DeviceOrientationEventTyped.requestPermission === 'function'
       ) {
         // Permission will be requested via user interaction (see useGyroscopePermission hook)
         // For now, just add the listener (it won't fire without permission)
@@ -196,13 +216,14 @@ export function useParallax(options: ParallaxOptions = {}) {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
+      window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('touchend', handleTouchEnd);
       window.removeEventListener('deviceorientation', handleDeviceOrientation);
     };
-  }, [intensity, enableTouch, enableGyroscope, finalMaxMovement, smoothing, deadZone, prefersReducedMotion, isMobile]);
+  }, [intensity, enableTouch, enableGyroscope, maxMovement, smoothing, deadZone, prefersReducedMotion]);
 
   return parallaxValues;
 }
@@ -215,12 +236,14 @@ export function useGyroscopePermission() {
   const [permission, setPermission] = useState<'granted' | 'denied' | 'prompt'>('prompt');
 
   const requestPermission = async () => {
+    const DeviceOrientationEventTyped = DeviceOrientationEvent as unknown as DeviceOrientationEventiOS;
+    
     if (
       typeof DeviceOrientationEvent !== 'undefined' &&
-      typeof (DeviceOrientationEvent as any).requestPermission === 'function'
+      typeof DeviceOrientationEventTyped.requestPermission === 'function'
     ) {
       try {
-        const response = await (DeviceOrientationEvent as any).requestPermission();
+        const response = await DeviceOrientationEventTyped.requestPermission();
         setPermission(response);
         return response === 'granted';
       } catch (error) {

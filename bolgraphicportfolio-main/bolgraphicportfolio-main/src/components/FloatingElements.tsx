@@ -26,9 +26,7 @@ export default function FloatingElements() {
         style={{ 
           y: y1, 
           rotate: rotate1,
-          x: parallax1.x,
-          // Combine scroll y with parallax y
-          translateY: parallax1.y,
+          transform: `translate3d(${parallax1.x}px, ${parallax1.y}px, 0)`,
         }}
         className="absolute top-1/4 right-1/4 w-2 h-2 bg-gray-300 rounded-full"
       />
@@ -38,8 +36,7 @@ export default function FloatingElements() {
         style={{ 
           y: y2, 
           rotate: rotate2,
-          x: parallax2.x,
-          translateY: parallax2.y,
+          transform: `translate3d(${parallax2.x}px, ${parallax2.y}px, 0)`,
         }}
         className="absolute top-1/3 left-1/4 w-16 h-16 border border-gray-200"
       />
@@ -48,8 +45,7 @@ export default function FloatingElements() {
       <motion.div
         style={{ 
           y: y3,
-          x: parallax3.x,
-          translateY: parallax3.y,
+          transform: `translate3d(${parallax3.x}px, ${parallax3.y}px, 0)`,
         }}
         className="absolute bottom-1/4 right-1/3 w-24 h-24 border-2 border-gray-200 rounded-full"
       />
@@ -59,8 +55,7 @@ export default function FloatingElements() {
         style={{ 
           y: y1, 
           rotate: rotate1,
-          x: parallax4.x,
-          translateY: parallax4.y,
+          transform: `translate3d(${parallax4.x}px, ${parallax4.y}px, 0)`,
         }}
         className="absolute top-1/2 left-1/3 w-12 h-12 text-gray-200"
         viewBox="0 0 100 100"
@@ -77,8 +72,7 @@ export default function FloatingElements() {
       <motion.div
         style={{ 
           y: y2,
-          x: parallax5.x,
-          translateY: parallax5.y,
+          transform: `translate3d(${parallax5.x}px, ${parallax5.y}px, 0)`,
         }}
         className="absolute bottom-1/3 left-1/4 w-3 h-3 bg-gray-300"
       />

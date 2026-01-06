@@ -32,8 +32,7 @@ export default function Hero() {
         style={{ 
           y, 
           opacity: 0.3,
-          x: parallaxBg.x,
-          translateY: parallaxBg.y,
+          transform: `translate3d(${parallaxBg.x}px, ${parallaxBg.y}px, 0)`,
         }}
         className="absolute inset-0 pointer-events-none"
       >
@@ -45,8 +44,7 @@ export default function Hero() {
       <motion.div
         style={{ 
           y: useTransform(scrollYProgress, [0, 1], ['0%', '20%']),
-          x: parallaxSvg.x,
-          translateY: parallaxSvg.y,
+          transform: `translate3d(${parallaxSvg.x}px, ${parallaxSvg.y}px, 0)`,
         }}
         className="absolute inset-0 pointer-events-none"
       >
@@ -118,16 +116,14 @@ export default function Hero() {
       <motion.div
         style={{ 
           y: useTransform(scrollYProgress, [0, 1], ['0%', '80%']),
-          x: parallaxShape1.x,
-          translateY: parallaxShape1.y,
+          transform: `translate3d(${parallaxShape1.x}px, ${parallaxShape1.y}px, 0)`,
         }}
         className="absolute bottom-20 left-20 w-8 h-8 border-2 border-gray-300 rotate-45"
       />
       <motion.div
         style={{ 
           y: useTransform(scrollYProgress, [0, 1], ['0%', '90%']),
-          x: parallaxShape2.x,
-          translateY: parallaxShape2.y,
+          transform: `translate3d(${parallaxShape2.x}px, ${parallaxShape2.y}px, 0)`,
         }}
         className="absolute top-40 right-32 w-4 h-4 bg-gray-300 rounded-full"
       />
